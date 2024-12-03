@@ -25,7 +25,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleSystemExceptions(SystemException ex, WebRequest request) {
         return switch (ex.getErrorCode()) {
             case BAD_REQ -> errorResp("Data Validation Error", HttpStatus.BAD_REQUEST,"3333");
-            default -> errorResp("JSON Syntax Error", HttpStatus.INTERNAL_SERVER_ERROR,"2222");
+            case NOT_FOUND -> errorResp(ex.getMessage(), HttpStatus.NOT_FOUND, "1111");
+            default -> errorResp(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,"2222");
         };
     }
     
