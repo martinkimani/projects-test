@@ -1,6 +1,7 @@
 package com.kcb.api.projectsTest.controllers;
 
 import com.kcb.api.projectsTest.dtos.ProjectDto;
+import com.kcb.api.projectsTest.dtos.TaskDto;
 import com.kcb.api.projectsTest.repositories.ProjectRepository;
 import com.kcb.api.projectsTest.services.ProjectService;
 import com.kcb.api.projectsTest.services.TaskService;
@@ -46,6 +47,11 @@ public class ProjectController {
     @GetMapping("/projects/{projectId}/tasks")
     public ResponseEntity getProjectTasks(@PathVariable long projectId, @RequestParam Map<String, String> params) {
         return new ResponseEntity(taskService.getProjectTasks(projectId, params), HttpStatus.OK);
+    }
+    
+    @PostMapping("/projects/{projectId}/tasks")
+    public ResponseEntity getProjectTasks(@PathVariable long projectId, @RequestBody TaskDto editTask) {
+        return new ResponseEntity(taskService.editProjectTask(projectId, editTask), HttpStatus.OK);
     }
     
     @GetMapping("/projects/summary")
