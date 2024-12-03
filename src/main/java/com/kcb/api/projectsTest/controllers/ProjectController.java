@@ -48,7 +48,7 @@ public class ProjectController {
         return new ResponseEntity(taskService.getProjectTasks(projectId, params), HttpStatus.OK);
     }
     
-    @GetMapping("/projects/{projectId}/tasks")
+    @GetMapping("/projects/tasks")
     public ResponseEntity getProjectSummary() {
         return new ResponseEntity(projectRepository.getProjectSummary(), HttpStatus.OK);
     }
