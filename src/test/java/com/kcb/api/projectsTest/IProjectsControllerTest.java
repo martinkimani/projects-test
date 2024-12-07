@@ -84,7 +84,7 @@ public class IProjectsControllerTest extends BaseIntegrationTest {
     }
 
     @Test
-void createProjectsValidationFailed() throws Exception {
+    void createProjectsValidationFailed() throws Exception {
     String payload = """
             {
                 "name": null,

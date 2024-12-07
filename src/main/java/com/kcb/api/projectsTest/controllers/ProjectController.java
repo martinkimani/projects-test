@@ -12,12 +12,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 /**
  *
@@ -57,8 +60,18 @@ public class ProjectController {
     }
     
     @PostMapping("/projects/{projectId}/tasks")
-    public ResponseEntity getProjectTasks(@PathVariable long projectId, @RequestBody @Valid TaskDto editTask) {
-        return new ResponseEntity(taskService.editProjectTask(projectId, editTask), HttpStatus.OK);
+    public ResponseEntity createProjectTask(@PathVariable long projectId, @RequestBody @Valid TaskDto  newTask) {
+        return new ResponseEntity(taskService.addProjectTask(projectId, newTask), HttpStatus.OK);
+    }
+
+    @PutMapping("/tasks/{taskId}")
+    public ResponseEntity editProjectTask(@PathVariable long taskId, @RequestBody @Valid TaskDto  editTask) {
+        return new ResponseEntity(taskService.editProjectTask(taskId, editTask), HttpStatus.OK);
+    }
+
+    @DeleteMapping("tasks/{taskId}")
+    public ResponseEntity deleteTask(@PathVariable long taskId) {
+        return new ResponseEntity(taskService.deleteTask(taskId), HttpStatus.OK);
     }
     
     @GetMapping("/projects/summary")
