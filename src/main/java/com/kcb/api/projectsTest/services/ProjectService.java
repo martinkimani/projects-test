@@ -27,12 +27,12 @@ public class ProjectService {
     
     public List<Project> getAllProjects() {
         List<Project> allProjects = projectRepo.findAll();
-        if(allProjects.isEmpty()) throw new SystemException("Projects Not Found", ErrorCode.NOT_FOUND);
+        if(allProjects.isEmpty()) throw new SystemException("Projects Not Found", ErrorCode.NOT_CONTENT);
         return allProjects;
     }
     
     public Project getProject(long id) {
-        return projectRepo.findById(id).orElseThrow(() -> new SystemException("project not found", ErrorCode.NOT_FOUND));
+        return projectRepo.findById(id).orElseThrow(() -> new SystemException("project not found", ErrorCode.NOT_CONTENT));
     }
     
     

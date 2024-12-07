@@ -35,13 +35,13 @@ public class TaskService {
     }
     
     public Task addProjectTask(long projectId,TaskDto newtask) {
-        Project project = projectRepo.findById(projectId).orElseThrow(() -> new SystemException("project not found", ErrorCode.NOT_FOUND));
+        Project project = projectRepo.findById(projectId).orElseThrow(() -> new SystemException("project not found", ErrorCode.NOT_CONTENT));
         return taskRepo.save(Task.builder().description(newtask.description()).dueDate(newtask.dueDate())
                 .projectId(project).status(TaskStatus.TO_DO).title(newtask.title()).build());
     }
     
     public Task editProjectTask(long taskId,TaskDto editTask) {
-        Task oldTask = taskRepo.findById(taskId).orElseThrow(() -> new SystemException("task not found", ErrorCode.NOT_FOUND));
+        Task oldTask = taskRepo.findById(taskId).orElseThrow(() -> new SystemException("task not found", ErrorCode.NOT_CONTENT));
         oldTask.setDescription(editTask.description());
         oldTask.setDueDate(editTask.dueDate());
         oldTask.setStatus(editTask.status());
@@ -50,7 +50,7 @@ public class TaskService {
     }
     
     public String deleteTask(long taskId) {
-        Task oldTask = taskRepo.findById(taskId).orElseThrow(() -> new SystemException("task not found", ErrorCode.NOT_FOUND));
+        Task oldTask = taskRepo.findById(taskId).orElseThrow(() -> new SystemException("task not found", ErrorCode.NOT_CONTENT));
         taskRepo.deleteById(oldTask.getId());
         return "Task deleted";
     }

@@ -18,15 +18,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *
  * @author martin
  */
+@SuppressWarnings({"unchecked","null"})
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value   = {SystemException.class })
     public ResponseEntity<Object> handleSystemExceptions(SystemException ex, WebRequest request) {
         return switch (ex.getErrorCode()) {
-            case BAD_REQ -> errorResp("Data Validation Error", HttpStatus.BAD_REQUEST,"3333");
-            case NOT_FOUND -> errorResp(ex.getMessage(), HttpStatus.NOT_FOUND, "1111");
-            default -> errorResp(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,"2222");
+            case BAD_REQ -> errorResp(ex.getMessage(), HttpStatus.BAD_REQUEST,"3333");
+            case NOT_CONTENT -> errorResp(ex.getMessage(), HttpStatus.NO_CONTENT, "1111");
+            default -> errorResp("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR,"2222");
         };
     }
     
@@ -43,10 +44,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        return errorResp("JSON Syntax Error", HttpStatus.INTERNAL_SERVER_ERROR,"2222");
+        return errorResp("Data Validation Error : "+extractProblemPart(ex.getMessage()), HttpStatus.BAD_REQUEST,"3333");
     }
     
     private ResponseEntity errorResp(String errorMessage, HttpStatus httpStatus,String statusCode) {
         return new ResponseEntity(new ErrorResp(statusCode, errorMessage), httpStatus);
+    }
+
+    private String extractProblemPart(String fullMessage) {
+        String problemPrefix = "problem: ";
+        int problemIndex = fullMessage.indexOf(problemPrefix);
+        if (problemIndex != -1) {
+            return fullMessage.substring(problemIndex + problemPrefix.length());
+        }
+        return fullMessage; // Fallback to the full message if the problem part is not found
     }
 }

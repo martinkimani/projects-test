@@ -5,6 +5,9 @@ import com.kcb.api.projectsTest.dtos.TaskDto;
 import com.kcb.api.projectsTest.repositories.ProjectRepository;
 import com.kcb.api.projectsTest.services.ProjectService;
 import com.kcb.api.projectsTest.services.TaskService;
+
+import jakarta.validation.Valid;
+
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author martin
  */
+@SuppressWarnings({"rawtypes","unchecked"})
+
 @RestController
 public class ProjectController {
     @Autowired
@@ -30,7 +35,7 @@ public class ProjectController {
     private ProjectRepository projectRepository;
     
     @PostMapping("/projects")
-    public ResponseEntity createNewProject(@RequestBody ProjectDto newproject) {
+    public ResponseEntity createNewProject(@RequestBody @Valid ProjectDto newproject) {
         return new ResponseEntity(projectService.createProject(newproject), HttpStatus.CREATED);
     }
     
@@ -39,10 +44,12 @@ public class ProjectController {
         return new ResponseEntity(projectService.getAllProjects(), HttpStatus.OK);
     }
     
+    
     @GetMapping("/projects/{projectId}")
     public ResponseEntity getProject(@PathVariable long projectId) {
         return new ResponseEntity(projectService.getProject(projectId), HttpStatus.OK);
     }
+    
     
     @GetMapping("/projects/{projectId}/tasks")
     public ResponseEntity getProjectTasks(@PathVariable long projectId, @RequestParam Map<String, String> params) {
@@ -50,7 +57,7 @@ public class ProjectController {
     }
     
     @PostMapping("/projects/{projectId}/tasks")
-    public ResponseEntity getProjectTasks(@PathVariable long projectId, @RequestBody TaskDto editTask) {
+    public ResponseEntity getProjectTasks(@PathVariable long projectId, @RequestBody @Valid TaskDto editTask) {
         return new ResponseEntity(taskService.editProjectTask(projectId, editTask), HttpStatus.OK);
     }
     
